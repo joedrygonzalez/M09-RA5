@@ -1,6 +1,7 @@
 public class Monoalfabetic {
     private static final String alfabet = "aáàbcçdeéèfghiíìïjklmnñoóòpqrstuúùüvwxyz";
     
+    
     public static String main(String[] args) {
         
     }
