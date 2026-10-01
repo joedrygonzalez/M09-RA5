@@ -23,11 +23,10 @@ public class Monoalfabetic {
             System.out.printf(format, texts[i], TextsXifrats[i]);
         }
 
-        String[] TextsDesxifrats = new String[TextsXifrats.length];
         System.out.println("Desxifratge:");
         for (int i = 0; i < TextsXifrats.length; i++) {
-            TextsDesxifrats[i] = desxifraMonoAlfa(TextsXifrats[i]);
-            System.out.printf(format, TextsXifrats[i], TextsDesxifrats[i]);
+            String desxifrat = desxifraMonoAlfa(TextsXifrats[i]);
+            System.out.printf(format, TextsXifrats[i], desxifrat);
         }
     }
     
@@ -44,11 +43,43 @@ public class Monoalfabetic {
     }
 
     public static String xifraMonoAlfa(String cadena) {
-    
+        return encriptar(cadena, majuscules, permutat);
     }
 
     public static String desxifraMonoAlfa(String cadena) {
+        return encriptar(cadena, permutat, majuscules);
+    }
 
+    public static String encriptar(String cadena, char[] origen, char[] desti) {
+        String text = "";
+        for (int i = 0; i < cadena.length(); i++) {
+            char c = cadena.charAt(i);
+            if (Character.isLowerCase(c)) {
+                int posicio = posicio(origen, Character.toUpperCase(c));
+                if (posicio != -1) {
+                    text += Character.toLowerCase(desti[posicio]);
+                } else {
+                    text += c;
+                }
+            } else {
+                int posicio = posicio(origen, c);
+                if (posicio != -1) {
+                    text += desti[posicio];
+                } else {
+                    text += c;
+                }
+            }
+        }
+        return text;
+    }
+
+    public static int posicio(char[] array, char c) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == c) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public static String espais(char[] array) {
