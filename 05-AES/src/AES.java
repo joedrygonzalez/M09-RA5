@@ -1,17 +1,30 @@
+
+import java.security.SecureRandom;
+
 public class AES {
     public static final String ALGORISME_XIFRAT = "AES";
     public static final String ALGORISME_HASH = "SHA-256";
     public static final String FORMAT_AES = "AES/CBC/PKCS5Padding";
 
+    private static SecureRandom random = new SecureRandom();
     private static final int MIDA_IV = 16;
     private static byte[] iv =  new byte[MIDA_IV];
-    private static final String CLAU = "HAYCTL87";
+    private static final String CLAU = "AHYCLT115";
 
     public static byte[] xifraAES(String msg, String clau) throws Exception {
-        
+        generaIV();
     }
 
     public static String desxifraAES (byte[] bIvIMsgXifrat, String clau) throws Exception {
+        
+    }
+
+    public static byte[] generarIV() {
+        random = SecureRandom.getInstance(ALGORISME_HASH);
+
+    }
+
+    public static Stirng generaHash() {
         
     }
 
