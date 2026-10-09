@@ -1,31 +1,67 @@
 
-import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.util.Arrays;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AES {
     public static final String ALGORISME_XIFRAT = "AES";
     public static final String ALGORISME_HASH = "SHA-256";
     public static final String FORMAT_AES = "AES/CBC/PKCS5Padding";
 
-    private static SecureRandom random = new SecureRandom();
     private static final int MIDA_IV = 16;
     private static byte[] iv =  new byte[MIDA_IV];
     private static final String CLAU = "AHYCLT115";
 
     public static byte[] xifraAES(String msg, String clau) throws Exception {
-        generaIV();
+        iv = generaIv();
+        SecretKeySpec hash = generaHash(clau);
+        
+        Cipher c = Cipher.getInstance(FORMAT_AES);
+        c.init(Cipher.ENCRYPT_MODE, hash, new IvParameterSpec(iv));
+        
+        byte[] xifrat = c.doFinal(msg.getBytes(StandardCharsets.UTF_8));
+        
+        byte[] resultat = new byte[MIDA_IV + xifrat.length];
+        System.arraycopy(iv, 0, resultat, 0, MIDA_IV);
+        System.arraycopy(xifrat, 0, resultat, MIDA_IV, xifrat.length);
+        return resultat;
     }
 
     public static String desxifraAES (byte[] bIvIMsgXifrat, String clau) throws Exception {
-        
+        byte[] ivExtret = extreureIv(bIvIMsgXifrat);
+
+        byte[] msgXifrat = getBytesXifrats(bIvIMsgXifrat);
+
+        SecretKeySpec hash = generaHash(clau);
+
+        Cipher c = Cipher.getInstance(FORMAT_AES);
+        c.init(Cipher.DECRYPT_MODE, hash, new IvParameterSpec(ivExtret));
+
+        byte[] original = c.doFinal(msgXifrat);
+        return new String(original, StandardCharsets.UTF_8);
     }
 
-    public static byte[] generarIV() {
-        random = SecureRandom.getInstance(ALGORISME_HASH);
-
+    private static byte[] generaIv() {
+        byte[] nouIv = new byte[MIDA_IV];
+        new SecureRandom().nextBytes(nouIv);
+        return nouIv;
+    }
+    
+    private static SecretKeySpec generaHash(String clau) throws Exception {
+        MessageDigest md = MessageDigest.getInstance(ALGORISME_HASH);
+        byte[] hash = md.digest(clau.getBytes(StandardCharsets.UTF_8));
+        return new SecretKeySpec(hash, ALGORISME_XIFRAT);
     }
 
-    public static Stirng generaHash() {
-        
+    public static byte[] extreureIv(byte[] bIvIMsgXifrat) {
+        return Arrays.copyOfRange(bIvIMsgXifrat, 0, MIDA_IV);
+    }
+
+    private static byte[] getBytesXifrats(byte[] bIvIMsgXifrat) {
+        return Arrays.copyOfRange(bIvIMsgXifrat, MIDA_IV, bIvIMsgXifrat.length);
     }
 
     public static void main(String[] args) {
