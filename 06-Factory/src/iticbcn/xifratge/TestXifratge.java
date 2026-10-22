@@ -7,9 +7,9 @@ public class TestXifratge {
                 new AlgorismePolialfabetic(), new AlgorismeRotX()
         };
 
-        String[] aNames = { "AES", "Monoalfabètic", "Polialfabètic", "RotX" };
+        String[] aNames = {"AES", "Monoalfabètic", "Polialfabètic", "RotX" };
 
-        String[] msgs = { "Test 01: Àlgid, Ülrich, Vàlid",
+        String[] msgs = {"Test 01: Àlgid, Ülrich, Vàlid",
                 "Test 02: Caràcters especials ¡¿?*-123[]{}@#" };
 
         String[][] claus = { { "Clau Secreta 01" }, { "ErrorClau", null },
